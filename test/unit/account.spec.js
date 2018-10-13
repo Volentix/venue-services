@@ -13,14 +13,14 @@ describe("Test 'account' service", () => {
 
   describe("Test 'account.setWallet' action", () => {
     it("should return the wallet which is passed", async () => {
-      expect(
+      return expect(
         broker.call("account.setWallet", { userId: "1", address: "abc" })
       ).resolves.toEqual({ userId: "1", address: "abc" });
     });
 
     it("should set the wallet which is returned with get", async () => {
       await broker.call("account.setWallet", { userId: "1", address: "abc" });
-      expect(
+      return expect(
         broker.call("account.getWallet", { userId: "1" })
       ).resolves.toEqual({
         address: "abc"
