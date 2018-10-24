@@ -2,7 +2,7 @@
 
 const { ServiceBroker } = require("moleculer");
 const { ValidationError } = require("moleculer").Errors;
-const TestService = require("../../services/account.service");
+const TestService = require("../../services/accounts.service");
 
 const faker = require("faker");
 
@@ -13,26 +13,26 @@ describe("Test 'account' service", () => {
   beforeAll(() => broker.start());
   afterAll(() => broker.stop());
 
-  describe("Test 'account.setWallet' action", () => {
+  describe("Test 'accounts.setWallet' action", () => {
     it("should return the wallet which is passed", async () => {
       const userId = faker.random.word();
       const address = faker.random.uuid();
       return expect(
-        broker.call("account.setWallet", { userId, address })
+        broker.call("accounts.setWallet", { userId, address })
       ).resolves.toEqual(expect.objectContaining({ userId, address }));
     });
 
     it("should set the wallet which is returned with get", async () => {
       const userId = faker.random.word();
       const address = faker.random.uuid();
-      await broker.call("account.setWallet", { userId, address });
+      await broker.call("accounts.setWallet", { userId, address });
       return expect(
-        broker.call("account.getWallet", { userId })
+        broker.call("accounts.getWallet", { userId })
       ).resolves.toEqual(expect.objectContaining({ userId, address }));
     });
 
     it("should reject an ValidationError", () => {
-      expect(broker.call("account.setWallet")).rejects.toBeInstanceOf(
+      expect(broker.call("accounts.setWallet")).rejects.toBeInstanceOf(
         ValidationError
       );
     });

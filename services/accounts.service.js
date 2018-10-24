@@ -7,9 +7,9 @@ const CacheCleanerMixin = require("../mixins/cache.cleaner.mixin");
  * Account Service contains the number of tokens that the user is owed.
  */
 module.exports = {
-  name: "account",
+  name: "accounts",
   mixins: [
-    DbService("account"),
+    DbService("accounts"),
     CacheCleanerMixin(["cache.clean.users", "cache.clean.follows"])
   ],
 
