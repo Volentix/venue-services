@@ -25,6 +25,8 @@
     "prettier": "^1.14.3"
   },
   "dependencies": {
+    "axios": "^0.18.0",
+    "jsonwebtoken": "^8.3.0",
     "moleculer": "^0.13.0",
     "moleculer-db": "^0.7.5",
     "moleculer-web": "^0.8.0",
