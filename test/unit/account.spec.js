@@ -19,7 +19,7 @@ describe("Test 'account' service", () => {
       const address = faker.random.uuid();
       return expect(
         broker.call("account.setWallet", { userId, address })
-      ).resolves.toEqual({ userId, address });
+      ).resolves.toEqual(expect.objectContaining({ userId, address }));
     });
 
     it("should set the wallet which is returned with get", async () => {
@@ -28,7 +28,7 @@ describe("Test 'account' service", () => {
       await broker.call("account.setWallet", { userId, address });
       return expect(
         broker.call("account.getWallet", { userId })
-      ).resolves.toEqual({ address });
+      ).resolves.toEqual(expect.objectContaining({ userId, address }));
     });
 
     it("should reject an ValidationError", () => {

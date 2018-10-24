@@ -1,7 +1,13 @@
 "use strict";
 
+const DbService = require("../mixins/db.mixin");
+
+/**
+ * Account Service contains the number of tokens that the user is owed.
+ */
 module.exports = {
   name: "account",
+  mixins: [DbService("account")],
 
   /**
    * Service settings
@@ -28,7 +34,9 @@ module.exports = {
         userId: "string",
         address: "string"
       },
-      handler(ctx) {
+      async handler(ctx) {
+        await this.adapter.insert(ctx.params);
+
         return { userId: ctx.params.userId, address: ctx.params.address };
       }
     },
@@ -36,8 +44,9 @@ module.exports = {
       params: {
         userId: "string"
       },
-      handler() {
-        return { address: "abc" };
+      async handler(ctx) {
+        const address = await this.adapter.findOne(ctx.params);
+        return address;
       }
     }
   },
