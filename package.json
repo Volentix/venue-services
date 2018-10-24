@@ -18,6 +18,7 @@
     "eslint": "^5.0.1",
     "eslint-config-prettier": "^3.1.0",
     "eslint-plugin-prettier": "^3.0.0",
+    "faker": "^4.1.0",
     "jest": "^23.3.0",
     "jest-cli": "^23.3.0",
     "moleculer-repl": "^0.5.0",
