@@ -15,7 +15,7 @@ describe("Test 'account' service", () => {
 
   describe("Test 'accounts.setWallet' action", () => {
     it("should return the wallet which is passed", async () => {
-      const userId = faker.random.word();
+      const userId = faker.random.alphaNumeric();
       const address = faker.random.uuid();
       return expect(
         broker.call("accounts.setWallet", { userId, address })
@@ -23,7 +23,7 @@ describe("Test 'account' service", () => {
     });
 
     it("should set the wallet which is returned with get", async () => {
-      const userId = faker.random.word();
+      const userId = faker.random.alphaNumeric();
       const address = faker.random.uuid();
       await broker.call("accounts.setWallet", { userId, address });
       return expect(
