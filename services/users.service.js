@@ -50,6 +50,7 @@ module.exports = {
      */
     login: {
       params: {
+        authServer: { type: "url" },
         user: {
           type: "object",
           props: {
@@ -62,11 +63,11 @@ module.exports = {
         let user;
         try {
           user = await axios.post(
-            // TODO Configure this
-            "https://venue-uat.volentix.io/api/authenticate/",
+            ctx.params.authServer + "/api/authenticate/",
             ctx.params.user
           );
         } catch (err) {
+          // console.error(err);
           throw new MoleculerClientError(
             "Failure with remote authentication",
             err.response.status,
@@ -189,8 +190,8 @@ module.exports = {
       }
 
       return { user };
-    },
-
+    }
+  },
   events: {
     "cache.clean.users"() {
       if (this.broker.cacher) this.broker.cacher.clean(`${this.name}.*`);

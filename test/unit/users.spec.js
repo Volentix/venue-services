@@ -15,6 +15,7 @@ describe("Test 'users' service", () => {
     it("should return a token on success", () => {
       return expect(
         broker.call("users.login", {
+          authServer: "https://venue-uat.volentix.io",
           user: {
             username: "thor",
             password: "default2018"
