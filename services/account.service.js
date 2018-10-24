@@ -1,13 +1,17 @@
 "use strict";
 
 const DbService = require("../mixins/db.mixin");
+const CacheCleanerMixin = require("../mixins/cache.cleaner.mixin");
 
 /**
  * Account Service contains the number of tokens that the user is owed.
  */
 module.exports = {
   name: "account",
-  mixins: [DbService("account")],
+  mixins: [
+    DbService("account"),
+    CacheCleanerMixin(["cache.clean.users", "cache.clean.follows"])
+  ],
 
   /**
    * Service settings
