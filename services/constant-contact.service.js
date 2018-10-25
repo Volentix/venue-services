@@ -1,4 +1,5 @@
 "use strict";
+require("dotenv").config();
 
 const { MoleculerClientError } = require("moleculer").Errors;
 
