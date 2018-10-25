@@ -44,6 +44,30 @@ services:
     depends_on:
       - nats
 
+  users:
+    build:
+      context: .
+    image: venue-v2
+    env_file: docker-compose.env
+    environment:
+      SERVICES: users
+    links:
+      - nats
+    depends_on:
+      - nats
+
+  constant-contact:
+    build:
+      context: .
+    image: venue-v2
+    env_file: docker-compose.env
+    environment:
+      SERVICES: constant-contact
+    links:
+      - nats
+    depends_on:
+      - nats
+
   nats:
     image: nats
 
