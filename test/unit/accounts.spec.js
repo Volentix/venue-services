@@ -7,7 +7,9 @@ const TestService = require("../../services/accounts.service");
 const faker = require("faker");
 
 describe("Test 'account' service", () => {
-  let broker = new ServiceBroker();
+  let broker = new ServiceBroker({
+    logLevel: "warning"
+  });
   broker.createService(TestService);
 
   beforeAll(() => broker.start());

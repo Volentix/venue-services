@@ -8,7 +8,9 @@ const faker = require("faker");
 const axios = require("axios");
 
 describe("Test 'constant-contact' service", () => {
-  let broker = new ServiceBroker();
+  let broker = new ServiceBroker({
+    logLevel: "warning"
+  });
   broker.createService(TestService);
 
   beforeAll(() => broker.start());
