@@ -2,13 +2,17 @@
 
 const { MoleculerClientError } = require("moleculer").Errors;
 
-const axios = require("axios");
 const HttpStatus = require("http-status-codes");
 
 const CONSTANT_CONTACT_URI = "https://api.constantcontact.com/v2";
 
 // Constant Contact list "Venue webapp"
 const VENUE_LIST_ID = "1360368441";
+
+const axios = require("axios").create({
+  baseUrl: CONSTANT_CONTACT_URI,
+  headers: { Authorization: process.env.CONSTANT_CONTACT_ACCESS_TOKEN }
+});
 
 module.exports = {
   name: "constant-contact",
@@ -37,32 +41,32 @@ module.exports = {
       async handler(ctx) {
         const { user } = ctx.params;
         let res;
-        try {
-          res = await axios.post(CONSTANT_CONTACT_URI + "/contacts", {
-            email_addresses: [
-              {
-                email_address: user.email
-              }
-            ],
-            lists: [
-              {
-                id: VENUE_LIST_ID
-              }
-            ]
-          });
-          if (res.status !== HttpStatus.OK) {
-            throw this.makeRemoteError(res);
-          }
-          return Object.assign({}, { user }, { id: res.data.id });
-        } catch (err) {
-          // console.error(err);
-          throw new MoleculerClientError(
-            "Failure with remote call",
-            err.response.status,
-            "",
-            err.response.data
-          );
+        // try {
+        res = await axios.post(CONSTANT_CONTACT_URI + "/contacts", {
+          email_addresses: [
+            {
+              email_address: user.email
+            }
+          ],
+          lists: [
+            {
+              id: VENUE_LIST_ID
+            }
+          ]
+        });
+        if (res.status !== HttpStatus.OK) {
+          throw this.makeRemoteError(res);
         }
+        return Object.assign({}, { user }, { id: res.data.id });
+        // } catch (err) {
+        //   console.error(err);
+        //   throw new MoleculerClientError(
+        //     "Failure with remote call",
+        //     err.response.status,
+        //     "",
+        //     err.response.data
+        //   );
+        // }
       }
     },
     /**
@@ -81,59 +85,61 @@ module.exports = {
       async handler(ctx) {
         const { oldEmail, user } = ctx.params;
 
-        try {
-          const res = await axios.get(CONSTANT_CONTACT_URI + "/contacts", {
-            params: {
-              email: oldEmail
-            }
-          });
-
-          if (res.status !== HttpStatus.OK) {
-            throw this.makeRemoteError(res);
+        // try {
+        const res = await axios.get(CONSTANT_CONTACT_URI + "/contacts", {
+          params: {
+            email: oldEmail
           }
+        });
 
-          if (res.data.results.length <= 0) {
-            throw new MoleculerClientError("User with given email not found");
-          }
-
-          const matchingContacts = res.data.results.filter(
-            result =>
-              result.lists.filter(list => list.id === VENUE_LIST_ID).length > 0
-          );
-
-          if (matchingContacts.length <= 0) {
-            throw new MoleculerClientError("User not in Venue list");
-          }
-
-          // There should only be one
-          const contact = matchingContacts[0];
-
-          contact.email_addresses.filter(
-            item => item.email_address === oldEmail
-          )[0] = user.email;
-
-          const res2 = await axios.put(
-            CONSTANT_CONTACT_URI + "/contacts/" + contact.id,
-            contact
-          );
-          if (res2.status !== HttpStatus.OK) {
-            throw this.makeRemoteError(res2);
-          }
-
-          return Object.assign({}, { user }, { id: contact.id });
-        } catch (err) {
-          // FIXME This improperly wraps TypeErrors and such; it should not
-          if (!(err instanceof MoleculerClientError)) {
-            throw new MoleculerClientError(
-              "Failure with remote call",
-              err.response.status,
-              "",
-              err.response.data
-            );
-          } else {
-            throw err;
-          }
+        if (res.status !== HttpStatus.OK) {
+          throw this.makeRemoteError(res);
         }
+
+        if (res.data.results.length <= 0) {
+          throw new MoleculerClientError("User with given email not found");
+        }
+
+        const matchingContacts = res.data.results.filter(
+          result =>
+            result.lists.filter(list => list.id === VENUE_LIST_ID).length > 0
+        );
+
+        if (matchingContacts.length <= 0) {
+          throw new MoleculerClientError("User not in Venue list");
+        }
+
+        // There should only be one
+        const contact = matchingContacts[0];
+
+        contact.email_addresses.filter(
+          item => item.email_address === oldEmail
+        )[0] = user.email;
+
+        const res2 = await axios.put(
+          CONSTANT_CONTACT_URI + "/contacts/" + contact.id,
+          contact
+        );
+
+        if (res2.status !== HttpStatus.OK) {
+          throw this.makeRemoteError(res2);
+        }
+
+        return Object.assign({}, { user }, { id: contact.id });
+        // } catch (err) {
+        //   throw err;
+        // FIXME This improperly wraps TypeErrors and such; it should not
+        // if (!(err instanceof MoleculerClientError)) {
+        //   throw new MoleculerClientError(
+        //     "Failure with remote call",
+        //     err.response.status,
+        //     "",
+        //     err.response.data
+        //   );
+        // } else {
+        //   throw err;
+        // }
+        // }
       }
     }
   },
@@ -142,7 +148,6 @@ module.exports = {
    */
   methods: {
     makeRemoteError(resp) {
-      console.error("resp", resp);
       return new MoleculerClientError(
         "Failure calling " + resp.request.url,
         resp.status,

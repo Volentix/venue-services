@@ -6,7 +6,6 @@ const TestService = require("../../services/constant-contact.service");
 
 const faker = require("faker");
 const axios = require("axios");
-jest.mock("axios");
 
 describe("Test 'constant-contact' service", () => {
   let broker = new ServiceBroker();

@@ -4,6 +4,7 @@ const { MoleculerClientError } = require("moleculer").Errors;
 
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
+const HttpStatus = require("http-status-codes");
 
 const DbService = require("../mixins/db.mixin");
 const CacheCleanerMixin = require("../mixins/cache.cleaner.mixin");
@@ -28,7 +29,7 @@ module.exports = {
 
     /** Validator schema for entity */
     entityValidator: {
-      username: { type: "string", min: 2, pattern: /^[a-zA-Z0-9]+$/ },
+      username: { type: "string", min: 2 },
       password: { type: "string", min: 6 },
       email: { type: "email" },
       bio: { type: "string", optional: true },
@@ -60,23 +61,16 @@ module.exports = {
         }
       },
       async handler(ctx) {
-        let user;
-        try {
-          user = await axios.post(
-            ctx.params.authServer + "/api/authenticate/",
-            ctx.params.user
-          );
-        } catch (err) {
-          // console.error(err);
-          throw new MoleculerClientError(
-            "Failure with remote authentication",
-            err.response.status,
-            "",
-            err.response.data
-          );
+        let res;
+        res = await axios.post(
+          ctx.params.authServer + "/api/authenticate/",
+          ctx.params.user
+        );
+        if (res.status !== HttpStatus.OK) {
+          throw this.makeRemoteError(res);
         }
 
-        if (!user || !user.data || !user.data.success) {
+        if (!res.data.success) {
           throw new MoleculerClientError(
             "Username or password is invalid!",
             422,
@@ -86,7 +80,7 @@ module.exports = {
         }
 
         // Transform user entity (remove password and all protected fields)
-        return this.transformDocuments(ctx, {}, user.data).then(user =>
+        return this.transformDocuments(ctx, {}, res.data).then(user =>
           this.transformEntity(user, true, ctx.meta.token)
         );
       }
@@ -184,12 +178,18 @@ module.exports = {
      */
     transformEntity(user, withToken, token) {
       if (user) {
-        //user.image = user.image || "https://www.gravatar.com/avatar/" + crypto.createHash("md5").update(user.email).digest("hex") + "?d=robohash";
-        //user.image = user.image || "";
         if (withToken) user.token = token || this.generateJWT(user);
       }
 
       return { user };
+    },
+    makeRemoteError(resp) {
+      return new MoleculerClientError(
+        "Failure calling " + resp.request.url,
+        resp.status,
+        "remote-failure",
+        resp.data
+      );
     }
   },
   events: {
