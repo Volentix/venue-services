@@ -42,7 +42,6 @@ module.exports = {
       async handler(ctx) {
         const { user } = ctx.params;
         let res;
-        // try {
         res = await axios.post(CONSTANT_CONTACT_URI + "/contacts", {
           email_addresses: [
             {
@@ -86,7 +85,6 @@ module.exports = {
       async handler(ctx) {
         const { oldEmail, user } = ctx.params;
 
-        // try {
         const res = await axios.get(CONSTANT_CONTACT_URI + "/contacts", {
           params: {
             email: oldEmail
@@ -127,20 +125,6 @@ module.exports = {
         }
 
         return Object.assign({}, { user }, { id: contact.id });
-        // } catch (err) {
-        //   throw err;
-        // FIXME This improperly wraps TypeErrors and such; it should not
-        // if (!(err instanceof MoleculerClientError)) {
-        //   throw new MoleculerClientError(
-        //     "Failure with remote call",
-        //     err.response.status,
-        //     "",
-        //     err.response.data
-        //   );
-        // } else {
-        //   throw err;
-        // }
-        // }
       }
     }
   },
