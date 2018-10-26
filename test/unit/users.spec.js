@@ -31,7 +31,8 @@ describe("Test 'users' service", () => {
         status: 200,
         data: {
           success: true,
-          username: fakeUsername
+          username: fakeUsername,
+          email: faker.internet.email()
         }
       });
       expect(

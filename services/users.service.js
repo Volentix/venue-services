@@ -79,14 +79,20 @@ module.exports = {
             [{ field: "username", message: "is not found" }]
           );
         }
+
+        // The name "user_profile_id" is ugly; replace with "_id"
         const entity = _.mapKeys(
           res.data,
           (v, k) => (k === "user_profile_id" ? "_id" : k)
         );
 
-        return this.adapter
-          .insert(entity)
-          .then(doc => this.transformDocuments(ctx, {}, doc))
+        // Store the user locally so that it can be found in resolveToken
+        if (!(await this.getById(entity._id))) {
+          console.log("storing", entity);
+          await this.adapter.insert(entity);
+        }
+
+        return this.transformDocuments(ctx, {}, entity)
           .then(user => this.transformEntity(user, true, ctx.meta.token))
           .then(json =>
             this.entityChanged("created", json, ctx).then(() => json)
@@ -122,7 +128,6 @@ module.exports = {
             }
           );
         }).then(decoded => {
-          console.log("decoded", decoded);
           if (decoded.id) return this.getById(decoded.id);
         });
       }
