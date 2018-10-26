@@ -26,16 +26,7 @@ module.exports = {
       process.env.JWT_SECRET || "-]CMHc[CF'CDUi^5-aQevpVdZe}7(S/Ps2jyi'e2",
 
     /** Public fields */
-    fields: ["_id", "username", "email", "language"],
-
-    /** Validator schema for entity */
-    entityValidator: {
-      username: { type: "string", min: 2 },
-      password: { type: "string", min: 6 },
-      email: { type: "email" },
-      bio: { type: "string", optional: true },
-      image: { type: "string", optional: true }
-    }
+    fields: ["_id", "username", "email", "language"]
   },
 
   /**
@@ -129,33 +120,6 @@ module.exports = {
         }).then(decoded => {
           if (decoded.id) return this.getById(decoded.id);
         });
-      }
-    },
-
-    /**
-     * Get current user entity.
-     * Auth is required!
-     *
-     * @actions
-     *
-     * @returns {Object} User entity
-     */
-    me: {
-      auth: "required",
-      cache: {
-        keys: ["#userID"]
-      },
-      handler(ctx) {
-        return this.getById(ctx.meta.user._id)
-          .then(user => {
-            if (!user)
-              return this.Promise.reject(
-                new MoleculerClientError("User not found!", 400)
-              );
-
-            return this.transformDocuments(ctx, {}, user);
-          })
-          .then(user => this.transformEntity(user, true, ctx.meta.token));
       }
     }
   },
