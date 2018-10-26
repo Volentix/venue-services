@@ -49,8 +49,9 @@ jobs:
           name: "Tag image and push to server"
           command: |
             TAG=v0.1.$CIRCLE_BUILD_NUM
-            docker pull shawnvlabs/venue-services:latest
-            docker build --cache-from=shawnvlabs/venue-services:latest -t shawnvlabs/venue-services:$TAG .
+#            docker pull shawnvlabs/venue-services:latest 
+            # docker build --cache-from=shawnvlabs/venue-services:latest -t shawnvlabs/venue-services:$TAG .
+            docker build -t shawnvlabs/venue-services:$TAG .
             echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
             docker tag shawnvlabs/venue-services:$TAG shawnvlabs/venue-services:latest
             docker push shawnvlabs/venue-services
