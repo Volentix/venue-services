@@ -2,6 +2,8 @@
 
 # venue-services
 
+> A microservices-based implementation of the Venue backend
+
 ## Build Setup
 
 ```bash
