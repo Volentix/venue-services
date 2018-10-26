@@ -88,7 +88,6 @@ module.exports = {
 
         // Store the user locally so that it can be found in resolveToken
         if (!(await this.getById(entity._id))) {
-          console.log("storing", entity);
           await this.adapter.insert(entity);
         }
 
