@@ -12,8 +12,24 @@ const VENUE_LIST_ID = "1360368441";
 
 const axios = require("axios").create({
   baseUrl: CONSTANT_CONTACT_URI,
-  headers: { Authorization: process.env.CONSTANT_CONTACT_ACCESS_TOKEN }
+  headers: {
+    Authorization: "Bearer " + process.env.CONSTANT_CONTACT_ACCESS_TOKEN,
+    "Content-Type": "application/json"
+  },
+  params: {
+    api_key: process.env.CONSTANT_CONTACT_APP_KEY
+  }
 });
+
+// axios.interceptors.request.use(request => {
+//   console.log("Starting Request", JSON.stringify(request, null, 2));
+//   return request;
+// });
+
+// axios.interceptors.response.use(response => {
+//   console.log("Response:", response);
+//   return response;
+// });
 
 module.exports = {
   name: "constant-contact",
@@ -42,31 +58,40 @@ module.exports = {
       async handler(ctx) {
         const { user } = ctx.params;
         let res;
-        res = await axios.post(CONSTANT_CONTACT_URI + "/contacts", {
-          email_addresses: [
+        try {
+          res = await axios.post(
+            CONSTANT_CONTACT_URI + "/contacts",
             {
-              email_address: user.email
-            }
-          ],
-          lists: [
+              email_addresses: [
+                {
+                  email_address: user.email
+                }
+              ],
+              lists: [
+                {
+                  id: VENUE_LIST_ID
+                }
+              ]
+            },
             {
-              id: VENUE_LIST_ID
+              params: {
+                action_by: "ACTION_BY_OWNER"
+              }
             }
-          ]
-        });
-        if (res.status !== HttpStatus.OK) {
+          );
+        } catch (error) {
+          if (error.response.status === HttpStatus.CONFLICT) {
+            throw new MoleculerClientError(
+              "User with this email already exists"
+            );
+          }
+          throw error;
+        }
+
+        if (res.status !== HttpStatus.CREATED) {
           throw this.makeRemoteError(res);
         }
         return Object.assign({}, { user }, { id: res.data.id });
-        // } catch (err) {
-        //   console.error(err);
-        //   throw new MoleculerClientError(
-        //     "Failure with remote call",
-        //     err.response.status,
-        //     "",
-        //     err.response.data
-        //   );
-        // }
       }
     },
     /**
@@ -117,7 +142,12 @@ module.exports = {
 
         const res2 = await axios.put(
           CONSTANT_CONTACT_URI + "/contacts/" + contact.id,
-          contact
+          contact,
+          {
+            params: {
+              action_by: "ACTION_BY_OWNER"
+            }
+          }
         );
 
         if (res2.status !== HttpStatus.OK) {

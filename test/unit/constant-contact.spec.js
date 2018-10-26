@@ -25,8 +25,8 @@ describe("Test 'constant-contact' service", () => {
 
   describe("Test 'constant-contact.add' action", () => {
     it("should return with ID returned from constant contact", async () => {
-      axios.post.mockResolvedValue({
-        status: 200,
+      axios.post.mockName("POST").mockResolvedValue({
+        status: 201,
         data: {
           id: fakeCcId
         }
@@ -56,6 +56,11 @@ describe("Test 'constant-contact' service", () => {
               id: "1360368441"
             }
           ]
+        },
+        {
+          params: {
+            action_by: "ACTION_BY_OWNER"
+          }
         }
       );
     });
@@ -87,7 +92,7 @@ describe("Test 'constant-contact' service", () => {
         moreData: faker.random.words()
       };
 
-      axios.get.mockResolvedValue({
+      axios.get.mockName("GET").mockResolvedValue({
         status: 200,
         data: {
           results: [fakeCCUser]
@@ -128,7 +133,12 @@ describe("Test 'constant-contact' service", () => {
               email_address: fakeEmail
             }
           ]
-        })
+        }),
+        {
+          params: {
+            action_by: "ACTION_BY_OWNER"
+          }
+        }
       );
     });
 
@@ -154,13 +164,13 @@ describe("Test 'constant-contact' service", () => {
           moreData: faker.random.words()
         };
 
-        axios.get.mockResolvedValue({
+        axios.get.mockName("GET").mockResolvedValue({
           status: 200,
           data: {
             results: [fakeCCUser]
           }
         });
-        axios.put.mockResolvedValue({
+        axios.put.mockName("PUT").mockResolvedValue({
           status: 200
         });
 
@@ -198,7 +208,12 @@ describe("Test 'constant-contact' service", () => {
                 email_address: anotherEmail
               }
             ]
-          })
+          }),
+          {
+            params: {
+              action_by: "ACTION_BY_OWNER"
+            }
+          }
         );
       });
     });
