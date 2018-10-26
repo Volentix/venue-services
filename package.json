@@ -31,6 +31,7 @@
     "jsonwebtoken": "^8.3.0",
     "moleculer": "^0.13.0",
     "moleculer-db": "^0.7.5",
+    "moleculer-db-adapter-mongo": "^0.4.2",
     "moleculer-web": "^0.8.0",
     "nats": "^1.0.0"
   },
