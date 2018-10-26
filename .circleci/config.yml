@@ -47,7 +47,9 @@ jobs:
             echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:${CIRCLE_SHA1}"' >> $BASH_ENV
       - run:
           name: Build image
-          command: docker build -t $FULL_IMAGE_NAME .
+          command: |
+            docker-compose build
+            docker tag venue-services:latest $FULL_IMAGE_NAME
       - run:
           name: Test image
           command: |
