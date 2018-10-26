@@ -32,13 +32,13 @@ services:
     depends_on:
       - nats
 
-  account:
+  accounts:
     build:
       context: .
     image: venue-v2
     env_file: docker-compose.env
     environment:
-      SERVICES: account
+      SERVICES: accounts
     links:
       - nats
     depends_on:
@@ -71,8 +71,8 @@ services:
   nats:
     image: nats
 
-  # redis:
-  #   image: redis:alpine
+  redis:
+    image: redis:alpine
 
   mongo:
     image: mongo
