@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  build_and_test:
     docker:
       # specify the version you desire here
       - image: circleci/node:8.12
@@ -38,3 +38,31 @@ jobs:
       - run: # run tests
           name: test
           command: npm test
+
+  build_image:
+    docker:
+      - image: docker:18.06.1-ce
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: "Tag image and push to server"
+          command: |
+            TAG=v0.1.$CIRCLE_BUILD_NUM
+            docker pull volentixlabs/venue-services:latest
+            docker build --cache-from=volentixlabs/venue-services:latest -t volentixlabs/venue-services:$TAG .
+            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+            docker tag volentixlabs/venue-services:$TAG volentixlabs/venue-services:latest
+            docker push volentixlabs/venue-services
+            echo $TAG
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - build_and_test
+      - build_image:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: master
