@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: .
-    image: venue-v2
+    image: venue-services
     env_file: docker-compose.env
     environment:
       SERVICES: api
@@ -35,7 +35,7 @@ services:
   accounts:
     build:
       context: .
-    image: venue-v2
+    image: venue-services
     env_file: docker-compose.env
     environment:
       SERVICES: accounts
@@ -47,7 +47,7 @@ services:
   users:
     build:
       context: .
-    image: venue-v2
+    image: venue-services
     env_file: docker-compose.env
     environment:
       SERVICES: users
@@ -59,7 +59,7 @@ services:
   constant-contact:
     build:
       context: .
-    image: venue-v2
+    image: venue-services
     env_file: docker-compose.env
     environment:
       SERVICES: constant-contact

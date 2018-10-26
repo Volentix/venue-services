@@ -1,5 +1,5 @@
 {
-  "name": "venue-v2",
+  "name": "venue-services",
   "version": "1.0.0",
   "description": "My Moleculer microservices project",
   "scripts": {
