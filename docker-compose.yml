@@ -20,18 +20,6 @@ services:
       - "traefik.frontend.entryPoints=http"
       - "traefik.frontend.rule=PathPrefix:/"
 
-  greeter:
-    build:
-      context: .
-    image: venue-v2
-    env_file: docker-compose.env
-    environment:
-      SERVICES: greeter
-    links:
-      - nats
-    depends_on:
-      - nats
-
   accounts:
     build:
       context: .
