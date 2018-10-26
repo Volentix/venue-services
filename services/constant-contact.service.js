@@ -95,7 +95,7 @@ module.exports = {
       }
     },
     /**
-     * Modify a new Constant Contact entry
+     * Modify an existing Constant Contact entry
      *
      * @actions
      * @param {Object} user - User entity
@@ -124,6 +124,7 @@ module.exports = {
           throw new MoleculerClientError("User with given email not found");
         }
 
+        // Find only the contacts who are on the Venue list
         const matchingContacts = res.data.results.filter(
           result =>
             result.lists.filter(list => list.id === VENUE_LIST_ID).length > 0
