@@ -64,3 +64,6 @@ typings/
 # Local database
 data
 db
+
+# Microsoft VSCode config files
+.vscode
