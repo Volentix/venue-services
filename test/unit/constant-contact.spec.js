@@ -130,6 +130,7 @@ describe("Test 'constant-contact' service", () => {
         Object.assign(fakeCCUser, {
           email_addresses: [
             {
+              // FIXME Even when this doesn't match, the test passes!!!
               email_address: fakeEmail
             }
           ]

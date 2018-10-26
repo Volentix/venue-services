@@ -138,7 +138,7 @@ module.exports = {
 
         contact.email_addresses.filter(
           item => item.email_address === oldEmail
-        )[0] = user.email;
+        )[0].email_address = user.email;
 
         const res2 = await axios.put(
           CONSTANT_CONTACT_URI + "/contacts/" + contact.id,
