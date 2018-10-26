@@ -1,5 +1,6 @@
 "use strict";
 
+const _ = require("lodash");
 const { MoleculerClientError } = require("moleculer").Errors;
 
 const axios = require("axios");
@@ -25,7 +26,7 @@ module.exports = {
       process.env.JWT_SECRET || "-]CMHc[CF'CDUi^5-aQevpVdZe}7(S/Ps2jyi'e2",
 
     /** Public fields */
-    fields: ["user_profile_id", "username", "email", "language"],
+    fields: ["_id", "username", "email", "language"],
 
     /** Validator schema for entity */
     entityValidator: {
@@ -78,11 +79,18 @@ module.exports = {
             [{ field: "username", message: "is not found" }]
           );
         }
-
-        // Transform user entity (remove password and all protected fields)
-        return this.transformDocuments(ctx, {}, res.data).then(user =>
-          this.transformEntity(user, true, ctx.meta.token)
+        const entity = _.mapKeys(
+          res.data,
+          (v, k) => (k === "user_profile_id" ? "_id" : k)
         );
+
+        return this.adapter
+          .insert(entity)
+          .then(doc => this.transformDocuments(ctx, {}, doc))
+          .then(user => this.transformEntity(user, true, ctx.meta.token))
+          .then(json =>
+            this.entityChanged("created", json, ctx).then(() => json)
+          );
       }
     },
 
@@ -114,6 +122,7 @@ module.exports = {
             }
           );
         }).then(decoded => {
+          console.log("decoded", decoded);
           if (decoded.id) return this.getById(decoded.id);
         });
       }
@@ -162,7 +171,7 @@ module.exports = {
 
       return jwt.sign(
         {
-          id: user.user_profile_id,
+          id: user._id,
           username: user.username,
           exp: Math.floor(exp.getTime() / 1000)
         },

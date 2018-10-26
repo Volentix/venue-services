@@ -21,10 +21,10 @@ const axios = require("axios").create({
   }
 });
 
-// axios.interceptors.request.use(request => {
-//   console.log("Starting Request", JSON.stringify(request, null, 2));
-//   return request;
-// });
+axios.interceptors.request.use(request => {
+  console.log("Starting Request", JSON.stringify(request, null, 2));
+  return request;
+});
 
 // axios.interceptors.response.use(response => {
 //   console.log("Response:", response);
@@ -52,6 +52,7 @@ module.exports = {
      * @returns {Object} Created contact
      */
     add: {
+      auth: "required",
       params: {
         user: { type: "object" }
       },
@@ -103,6 +104,7 @@ module.exports = {
      * @returns {Object} Created contact
      */
     modify: {
+      auth: "required",
       params: {
         user: { type: "object" },
         oldEmail: { type: "email" }
