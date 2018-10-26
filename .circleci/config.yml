@@ -77,21 +77,16 @@ jobs:
       - setup_remote_docker
       - attach_workspace:
           at: workspace
-      - run:
-          name: Install the AWS CLI
-          command: |
-            apt install python-pip python-dev
-            pip install awscli
       - restore_cache:
-          key: v1-{{ checksum "requirements.txt" }}
+          key: v1-{{ checksum "awscli-requirements.txt" }}
       - run:
-          name: Install the AWS CLI
+          name: Install awscli
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r requirements.txt
+            pip install -r awscli-requirements.txt
       - save_cache:
-          key: v1-{{ checksum "requirements.txt" }}
+          key: v1-{{ checksum "awscli-requirements.txt" }}
           paths:
             - "venv"
       - run:
