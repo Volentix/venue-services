@@ -36,12 +36,7 @@ make_task_def(){
 		{
 			"name": "%s",
 			"image": "%s.dkr.ecr.%s.amazonaws.com/%s:%s",
-			"essential": true,
-			"portMappings": [
-				{
-					"containerPort": 4000
-				}
-			]
+			"essential": true
 		}
 	]'
 	
