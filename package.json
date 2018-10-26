@@ -1,7 +1,8 @@
 {
   "name": "venue-services",
-  "version": "1.0.0",
-  "description": "My Moleculer microservices project",
+  "version": "0.0.1",
+  "description": "A microservices-based implementation of the Venue backend",
+  "license": "MIT",
   "scripts": {
     "dev": "moleculer-runner --repl --hot services",
     "start": "moleculer-runner",
@@ -13,7 +14,7 @@
     "microservices",
     "moleculer"
   ],
-  "author": "",
+  "author": "Shawn Lauzon <shawn@volentixlabs.com>",
   "devDependencies": {
     "eslint": "^5.0.1",
     "eslint-config-prettier": "^3.1.0",
@@ -22,6 +23,7 @@
     "jest": "^23.3.0",
     "jest-cli": "^23.3.0",
     "moleculer-repl": "^0.5.0",
+    "nyc": "^13.1.0",
     "prettier": "^1.14.3"
   },
   "dependencies": {
