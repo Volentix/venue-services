@@ -32,28 +32,26 @@ deploy_cluster() {
 }
 
 make_task_def(){
-	task_template='[
-		{
-			"name": "%s",
-			"image": "%s.dkr.ecr.%s.amazonaws.com/%s:%s",
-			"essential": true,
-			"portMappings": [
-				{
-          "containerPort": 8080
-				}
-			],
-      "logConfiguration": {
-        "logDriver": "awslogs",
-        "options": {
-          "awslogs-group": "/ecs/%s",
-          "awslogs-region": "%s",
-          "awslogs-stream-prefix": "ecs"
-        }        
-      }
-		}
-	]'
+	task_template='[ {
+        "name": "%s",
+        "image": "%s.dkr.ecr.%s.amazonaws.com/%s:%s",
+        "essential": true,
+        "portMappings": [ {
+            "containerPort": 8080
+        } ],
+        "command": "docker-compose up -d",
+        "logConfiguration": {
+            "logDriver": "awslogs",
+            "options": {
+                "awslogs-group": "/ecs/%s",
+                "awslogs-region": "%s",
+                "awslogs-stream-prefix": "ecs"
+            }        
+        }
+    } ]'
 	
-   	task_def=$(printf "$task_template" $ECS_CONTAINER_DEFINITION_NAME $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION $ECR_REPOSITORY_NAME $CIRCLE_SHA1 $ECR_REPOSITORY_NAME $AWS_DEFAULT_REGION)
+   	task_def=$(printf "$task_template" $ECS_CONTAINER_DEFINITION_NAME $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION \
+       $ECR_REPOSITORY_NAME $CIRCLE_SHA1 $ECR_REPOSITORY_NAME $AWS_DEFAULT_REGION)
 }
 
 register_definition() {
