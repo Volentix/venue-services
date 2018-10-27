@@ -8,7 +8,7 @@ services:
     env_file: docker-compose.env
     environment:
       SERVICES: api
-      PORT: 80
+      PORT: 3000
     links:
       - redis
       - mongo
@@ -22,7 +22,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.backend=api"
-      - "traefik.port=80"
+      - "traefik.port=3000"
       - "traefik.frontend.entryPoints=http"
       - "traefik.frontend.rule=PathPrefix:/"
 
@@ -95,8 +95,8 @@ services:
     image: traefik
     command: --web --docker --docker.domain=docker.localhost --logLevel=INFO --docker.exposedbydefault=false
     ports:
-      - "80:80"
-      - "8080:8080"
+      - "3000:80"
+      - "3001:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /dev/null:/traefik.toml
