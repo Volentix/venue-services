@@ -39,7 +39,6 @@ make_task_def(){
         "portMappings": [ {
             "containerPort": 8080
         } ],
-        "command": "docker-compose up -d",
         "logConfiguration": {
             "logDriver": "awslogs",
             "options": {
