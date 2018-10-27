@@ -9,6 +9,12 @@ services:
     environment:
       SERVICES: api
       PORT: 8080
+    links:
+      - redis
+      - mongo
+    depends_on:
+      - redis
+      - mongo
     # links:
     #   - nats
     # depends_on:
@@ -27,6 +33,12 @@ services:
     env_file: docker-compose.env
     environment:
       SERVICES: accounts
+    links:
+      - redis
+      - mongo
+    depends_on:
+      - redis
+      - mongo
     # links:
     #   - nats
     # depends_on:
@@ -39,6 +51,12 @@ services:
     env_file: docker-compose.env
     environment:
       SERVICES: users
+    links:
+      - redis
+      - mongo
+    depends_on:
+      - redis
+      - mongo
     # links:
     #   - nats
     # depends_on:
@@ -51,6 +69,12 @@ services:
     env_file: docker-compose.env
     environment:
       SERVICES: constant-contact
+    links:
+      - redis
+      - mongo
+    depends_on:
+      - redis
+      - mongo
     # links:
     #   - nats
     # depends_on:
