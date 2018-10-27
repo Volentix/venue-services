@@ -10,7 +10,7 @@ module.exports = {
   logFormatter: "default",
   logObjectPrinter: null,
 
-  transporter: "NATS",
+  // transporter: "NATS",
 
   serializer: "JSON",
 
