@@ -45,7 +45,7 @@ make_task_def(){
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "/ecs/%s-service",
+          "awslogs-group": "/ecs/%s",
           "awslogs-region": "%s",
           "awslogs-stream-prefix": "ecs"
         }        
