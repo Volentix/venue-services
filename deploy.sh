@@ -37,7 +37,7 @@ make_task_def(){
         "image": "%s.dkr.ecr.%s.amazonaws.com/%s:%s",
         "essential": true,
         "portMappings": [ {
-            "containerPort": 3000
+            "containerPort": 8080
         } ],
         "logConfiguration": {
             "logDriver": "awslogs",
