@@ -9,10 +9,10 @@ services:
     environment:
       SERVICES: api
       PORT: 4000
-    links:
-      - nats
-    depends_on:
-      - nats
+    # links:
+    #   - nats
+    # depends_on:
+    #   - nats
     labels:
       - "traefik.enable=true"
       - "traefik.backend=api"
@@ -27,10 +27,10 @@ services:
     env_file: docker-compose.env
     environment:
       SERVICES: accounts
-    links:
-      - nats
-    depends_on:
-      - nats
+    # links:
+    #   - nats
+    # depends_on:
+    #   - nats
 
   users:
     build:
@@ -39,10 +39,10 @@ services:
     env_file: docker-compose.env
     environment:
       SERVICES: users
-    links:
-      - nats
-    depends_on:
-      - nats
+    # links:
+    #   - nats
+    # depends_on:
+    #   - nats
 
   constant-contact:
     build:
@@ -51,13 +51,13 @@ services:
     env_file: docker-compose.env
     environment:
       SERVICES: constant-contact
-    links:
-      - nats
-    depends_on:
-      - nats
+    # links:
+    #   - nats
+    # depends_on:
+    #   - nats
 
-  nats:
-    image: nats
+  # nats:
+  #   image: nats
 
   redis:
     image: redis:alpine
