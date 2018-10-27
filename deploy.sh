@@ -41,11 +41,19 @@ make_task_def(){
 				{
           "containerPort": 8080
 				}
-			]
+			],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/%s-service",
+          "awslogs-region": "%s",
+          "awslogs-stream-prefix": "ecs"
+        }        
+      }
 		}
 	]'
 	
-   	task_def=$(printf "$task_template" $ECS_CONTAINER_DEFINITION_NAME $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION $ECR_REPOSITORY_NAME $CIRCLE_SHA1)
+   	task_def=$(printf "$task_template" $ECS_CONTAINER_DEFINITION_NAME $AWS_ACCOUNT_ID $AWS_DEFAULT_REGION $ECR_REPOSITORY_NAME $CIRCLE_SHA1 $ECR_REPOSITORY_NAME $AWS_DEFAULT_REGION)
 }
 
 register_definition() {
